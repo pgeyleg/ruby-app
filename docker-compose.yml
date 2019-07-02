@@ -1,0 +1,9 @@
+version: '3'
+services:
+  web:
+    image: web:dev
+    command: "/bin/bash"
+    build:
+      context: .
+    volumes:
+      - .:/app
