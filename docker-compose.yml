@@ -5,5 +5,14 @@ services:
     command: "/bin/bash"
     build:
       context: .
+    environment:
+      RAILS_ENV: development
+      RAILS_PORT: 3010
     volumes:
+      - bundle_cache:/bundle
       - .:/app
+    ports:
+      - 3010:3010
+
+volumes:
+  bundle_cache:
