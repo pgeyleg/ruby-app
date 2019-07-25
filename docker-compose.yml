@@ -6,13 +6,23 @@ services:
     build:
       context: .
     environment:
+      SELENIUM_HOST: selenium
       RAILS_ENV: development
       RAILS_PORT: 3010
     volumes:
       - bundle_cache:/bundle
       - .:/app
     ports:
-      - 3010:3010
+      - 3000:3000
+      - 3001:3001
+
+  selenium:
+    image: selenium/standalone-chrome-debug
+    volumes:
+       - /dev/shm:/dev/shm
+    ports:
+      - 4444:4444
+      - 5900:5900
 
 volumes:
   bundle_cache:
