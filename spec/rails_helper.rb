@@ -5,23 +5,23 @@ require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
-
 require 'capybara/rails'
 require 'capybara/rspec'
+#require 'selenium/webdriver'
 
 #Capybara.app_host = "http://#{ENV['TEST_APP_HOST']}:#{NV['TEST_PORT']}"
 Capybara.javascript_driver = :selenium_remote_driver
 #Capybara.run_server = false
 
 # Configure the Chrome driver capabilities & register
-args = ['--no-default-browser-check', '--start-maximized']
-caps = Selenium::WebDriver::Remote::Capabilities.chrome("chromeOptions" => {"args" => args})
+#args = ['--no-default-browser-check', '--start-maximized']
+#caps = Selenium::WebDriver::Remote::Capabilities.chrome("chromeOptions" => {"args" => args})
 Capybara.register_driver :selenium_remote_driver do |app|
   Capybara::Selenium::Driver.new(
       app,
       browser: :remote,
       url: "http://#{ENV['SELENIUM_HOST']}:#{ENV['SELENIUM_PORT']}/wd/hub",
-      desired_capabilities: caps
+      desired_capabilities: :chrome
   )
 end
 # Add additional requires below this line. Rails is not loaded until this point!
@@ -78,11 +78,8 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
   config.before(:each) do
     if /selenium_remote/.match Capybara.current_driver.to_s
-      #ip = `/sbin/ip route|awk '/scope/ { print $9 }'`
-      #ip = ip.gsub "\n", ""
-      docker_ip = %x(/sbin/ip route|awk '/default/ { print $3 }').strip
-      Capybara.server_port = "3001"
-      Capybara.server_host = ip
+      Capybara.server_port = ENV['TEST_HOST_PORT']
+      Capybara.server_host = ENV['TEST_HOST']
       Capybara.app_host = "http://#{Capybara.current_session.server.host}:#{Capybara.current_session.server.port}"
     end
   end
