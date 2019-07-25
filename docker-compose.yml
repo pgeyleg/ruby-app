@@ -2,7 +2,7 @@ version: '3'
 services:
   web:
     image: web:dev
-    command: "/bin/bash"
+    command: ./bin/docker-dev-server.sh
     build:
       context: .
     environment:
