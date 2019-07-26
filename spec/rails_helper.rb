@@ -9,9 +9,9 @@ require 'capybara/rails'
 require 'capybara/rspec'
 #require 'selenium/webdriver'
 
-#Capybara.app_host = "http://#{ENV['TEST_APP_HOST']}:#{NV['TEST_PORT']}"
+Capybara.app_host = "http://#{ENV['TEST_APP_HOST']}:#{ENV['TEST_PORT']}"
 Capybara.javascript_driver = :selenium_remote_driver
-#Capybara.run_server = false
+Capybara.run_server = false
 
 # Configure the Chrome driver capabilities & register
 #args = ['--no-default-browser-check', '--start-maximized']
@@ -78,9 +78,10 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
   config.before(:each) do
     if /selenium_remote/.match Capybara.current_driver.to_s
-      Capybara.server_port = ENV['TEST_HOST_PORT']
-      Capybara.server_host = ENV['TEST_HOST']
-      Capybara.app_host = "http://#{Capybara.current_session.server.host}:#{Capybara.current_session.server.port}"
+      #Capybara.server_port = ENV['TEST_HOST_PORT']
+      #Capybara.server_host = ENV['TEST_HOST']
+      #Capybara.app_host = "http://#{Capybara.current_session.server.host}:#{Capybara.current_session.server.port}"
+      Capybara.app_host = "http://#{ENV['TEST_APP_HOST']}:#{ENV['TEST_PORT']}"
     end
   end
 

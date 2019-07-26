@@ -8,16 +8,37 @@ services:
     environment:
       SELENIUM_HOST: selenium
       SELENIUM_PORT: 4444
-      TEST_HOST: web
+      TEST_HOST: test
       TEST_HOST_PORT: 3001
       RAILS_ENV: development
-      RAILS_PORT: 3010
+      RAILS_PORT: 3000
     volumes:
       - bundle_cache:/bundle
       - .:/app
     ports:
       - 3000:3000
+    depends_on:
+      - test
+
+  test:
+    image: web:dev
+    command: ./bin/docker-test-server.sh
+    build:
+      context: .
+    environment:
+      SELENIUM_HOST: selenium
+      SELENIUM_PORT: 4444
+      TEST_HOST: test
+      TEST_HOST_PORT: 3001
+      RAILS_ENV: development
+      RAILS_PORT: 3000
+    volumes:
+      - bundle_cache:/bundle
+      - .:/app
+    ports:
       - 3001:3001
+    depends_on:
+      - selenium
 
   selenium:
     image: selenium/standalone-chrome-debug

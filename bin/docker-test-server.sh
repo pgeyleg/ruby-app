@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+bundle install --jobs 20 --retry 5
+
+bundle exec rake db:setup
+yarn install --check-files
+
+rm -f tmp/pids/server.pid
+bundle exec rails server -b 0.0.0.0 -p $TEST_HOST_PORT
